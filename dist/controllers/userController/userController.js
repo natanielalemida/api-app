@@ -26,6 +26,17 @@ class UserController {
             return yield this.userService.getUsers(organizationId);
         });
     }
+    createUser(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { verifyBodyUser } = (0, validator_1.default)();
+            const { body } = req;
+            const data = verifyBodyUser(body);
+            const creanteduser = yield this.userService.createUser(data);
+            if (!creanteduser)
+                return { status: 500, message: 'Cannot create user' };
+            return { status: 200, message: 'User created successfully' };
+        });
+    }
 }
 exports.default = UserController;
 //# sourceMappingURL=userController.js.map

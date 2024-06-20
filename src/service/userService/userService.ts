@@ -6,7 +6,7 @@ import { userDto } from "../../types/userTypes/userDto";
 export default class UserService implements IUserService {
     private userRepository = new UserRepository()
     
-  public async getUsers(organizationId: number): Promise<string[] | undefined> {
+  public async getUsers(organizationId: number): Promise<string[] | []> {
     return await this.userRepository.getUsers(organizationId)
   }
 

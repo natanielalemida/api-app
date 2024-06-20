@@ -12,30 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const userRepository_1 = __importDefault(require("../../repository/userRepository"));
-class UserService {
+const validator_1 = __importDefault(require("../../middleware/validator"));
+const employeeService_1 = __importDefault(require("../../service/employeeService/employeeService"));
+class EmployeeController {
     constructor() {
-        this.userRepository = new userRepository_1.default();
+        this.employeeService = new employeeService_1.default();
     }
-    getUsers(organizationId) {
+    getEmployeeByOrganizationId(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.getUsers(organizationId);
-        });
-    }
-    getUserCPF(CPF) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.getUserByCPF(CPF);
-        });
-    }
-    createUser(body) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.getUserCPF(body.cpf);
-            if (user) {
-                throw new Error('Usuario ja cadastrado!');
-            }
-            return yield this.userRepository.createUser(body);
+            const { verifyOrganizationNumber } = (0, validator_1.default)();
+            const { organizationId } = req.params;
+            verifyOrganizationNumber(organizationId);
+            return yield this.employeeService.getEmployeeByOrganizationId(organizationId);
         });
     }
 }
-exports.default = UserService;
-//# sourceMappingURL=userService.js.map
+exports.default = EmployeeController;
+//# sourceMappingURL=employeeController.js.map

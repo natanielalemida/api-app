@@ -18,8 +18,37 @@ class UserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const users = yield (0, connetion_1.default)('customers').select('*').where('organization_id', organizationId);
             if (!users.length)
+                return [];
+            return users;
+        });
+    }
+    getUserByCPF(CPF) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const users = yield (0, connetion_1.default)('customers').select('*').where('cpf', CPF).first();
+            if (!users)
                 return undefined;
             return users;
+        });
+    }
+    getUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const users = yield (0, connetion_1.default)('customers').select('*').where('id_customers', id).first();
+            if (!users)
+                return undefined;
+            return users;
+        });
+    }
+    createUser(body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const [user] = yield (0, connetion_1.default)('customers').insert({
+                organization_id: body.organizationId,
+                customers_name: body.custurmesName,
+                cpf: body.cpf,
+            });
+            const newUser = yield this.getUserById(user);
+            if (!newUser)
+                throw new Error('Falha ao criar usuario!');
+            return user;
         });
     }
 }

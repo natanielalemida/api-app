@@ -12,30 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const userRepository_1 = __importDefault(require("../../repository/userRepository"));
-class UserService {
-    constructor() {
-        this.userRepository = new userRepository_1.default();
-    }
-    getUsers(organizationId) {
+const connetion_1 = __importDefault(require("../database/connetion"));
+class EmployeeRepository {
+    getEmployeeByOrganizationId(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.getUsers(organizationId);
-        });
-    }
-    getUserCPF(CPF) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.getUserByCPF(CPF);
-        });
-    }
-    createUser(body) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.getUserCPF(body.cpf);
-            if (user) {
-                throw new Error('Usuario ja cadastrado!');
-            }
-            return yield this.userRepository.createUser(body);
+            const employees = yield (0, connetion_1.default)('employee').select('*').where('organization_id', organizationId);
+            if (!employees.length)
+                return undefined;
+            return employees;
         });
     }
 }
-exports.default = UserService;
-//# sourceMappingURL=userService.js.map
+exports.default = EmployeeRepository;
+//# sourceMappingURL=employeeRepository.js.map

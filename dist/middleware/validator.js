@@ -7,8 +7,16 @@ function validator() {
             throw new Error("Invalid organization number");
         }
     }
+    function verifyBodyUser(body) {
+        return {
+            organizationId: Number(body.organizationId),
+            custurmesName: body.custurmesName,
+            cpf: body.cpf
+        };
+    }
     return {
         verifyOrganizationNumber,
+        verifyBodyUser
     };
 }
 exports.default = validator;

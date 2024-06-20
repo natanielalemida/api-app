@@ -14,11 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const userController_1 = __importDefault(require("./controllers/userController/userController"));
+const employeeController_1 = __importDefault(require("./controllers/employeeController/employeeController"));
 const app = (0, express_1.default)();
 const port = 3000;
+app.use(express_1.default.json());
 const userController = new userController_1.default();
+const employeeController = new employeeController_1.default();
 app.get('/customers/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(yield userController.getUsers(req));
+}));
+app.post('/customers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield userController.createUser(req);
+    return res.status(result.status).send(result.message);
+}));
+app.get('/employee/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.send(yield employeeController.getEmployeeByOrganizationId(req));
 }));
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);

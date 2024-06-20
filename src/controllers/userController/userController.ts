@@ -1,6 +1,7 @@
-import IUserControler from "../../interface/controllers/IUserControler";
+import IUserControler from "../../interface/controllers/IUserController";
 import validator from "../../middleware/validator";
 import UserService from "../../service/userService/userService";
+import { statusDto } from "../../types/userTypes/statusDto";
 
 export default class UserController implements IUserControler {
   private userService = new UserService();
@@ -13,15 +14,16 @@ export default class UserController implements IUserControler {
     return await this.userService.getUsers(organizationId);
   }
 
-  public async createUser(req, res): Promise<string | undefined> {
+  public async createUser(req): Promise<statusDto> {
 
     const { verifyBodyUser } = validator();
-    const { body } = req.params;
-
+    const { body } = req;
     const data = verifyBodyUser(body);
 
-    if(!data) return res.status(404)
+    const creanteduser = await this.userService.createUser(data)
 
-    return res.status(200)
+    if(!creanteduser) return { status: 500, message: 'Cannot create user' }
+
+    return { status: 200, message: 'User created successfully' };
   }
 }
