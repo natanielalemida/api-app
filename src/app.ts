@@ -30,6 +30,10 @@ app.get('/employee/:organizationId', async (req, res) => {
   res.send(await employeeController.getEmployeeByOrganizationId(req))
 });
 
+app.post('/auth', async (req, res) => {
+  res.send(await employeeController.validateEmailAndPassword(req))
+});
+
 /* END SESSION */
 
 app.listen(port, () => {

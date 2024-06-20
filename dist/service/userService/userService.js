@@ -13,12 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userRepository_1 = __importDefault(require("../../repository/userRepository"));
+const organizationService_1 = __importDefault(require("../organizationService/organizationService"));
 class UserService {
     constructor() {
         this.userRepository = new userRepository_1.default();
+        this.organizatioService = new organizationService_1.default();
     }
     getUsers(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.organizatioService.verifyOrganizationById(organizationId);
             return yield this.userRepository.getUsers(organizationId);
         });
     }
@@ -29,6 +32,7 @@ class UserService {
     }
     createUser(body) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.organizatioService.verifyOrganizationById(body.organizationId);
             const user = yield this.getUserCPF(body.cpf);
             if (user) {
                 throw new Error('Usuario ja cadastrado!');

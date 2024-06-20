@@ -13,15 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const connetion_1 = __importDefault(require("../database/connetion"));
+const employeeMapper_1 = __importDefault(require("../mapper/employeeMapper"));
 class EmployeeRepository {
     getEmployeeByOrganizationId(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const employees = yield (0, connetion_1.default)('employee').select('*').where('organization_id', organizationId);
+            const employees = yield (0, connetion_1.default)("employee")
+                .select("id_employee", "employee_name", "employee_email", "employee_cpf", "employee_phone", "employee_photo")
+                .where("organization_id", organizationId)
+                .andWhere("active", 1);
             if (!employees.length)
                 return undefined;
-            return employees;
+            return employeeMapper_1.default.mappOne(employees);
         });
     }
+    validateEmailAndPassword(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield (0, connetion_1.default)("employee").select('*').where('employee_email', email).andWhere('password', password).andWhere('active', 1).first();
+            if (!result)
+                return false;
+            return true;
+        });
+    }
+    ;
 }
 exports.default = EmployeeRepository;
 //# sourceMappingURL=employeeRepository.js.map

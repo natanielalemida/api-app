@@ -6,7 +6,7 @@ import { organizationFromSQLDto } from "../types/organization/organizationFromSQ
 
 export default class OrganizationRepository implements IOrganizationRepository {
     public async getOrganizationById(organizationId: number) : Promise<OrganizationDto | undefined> {
-        const data = await connection.select<organizationFromSQLDto>('*').where('idOrganization', organizationId).first()
+        const data = await connection('organization').select<organizationFromSQLDto>('*').where('id_organization', organizationId).first()
 
         if(!data) return undefined
 

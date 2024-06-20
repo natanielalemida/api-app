@@ -1,12 +1,13 @@
 import IUserControler from "../../interface/controllers/IUserController";
 import validator from "../../middleware/validator";
 import UserService from "../../service/userService/userService";
-import { statusDto } from "../../types/userTypes/statusDto";
+import { statusDto } from "../../types/statusDto";
+import { userDto } from "../../types/userTypes/userDto";
 
 export default class UserController implements IUserControler {
   private userService = new UserService();
 
-  public async getUsers(req): Promise<string[] | undefined> {
+  public async getUsers(req): Promise<userDto[] | undefined> {
     const { verifyOrganizationNumber } = validator();
 
     const { organizationId } = req.params;

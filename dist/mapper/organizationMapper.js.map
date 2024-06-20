@@ -1,0 +1,1 @@
+{"version":3,"file":"organizationMapper.js","sourceRoot":"","sources":["../../src/mapper/organizationMapper.ts"],"names":[],"mappings":";;AAGA,MAAqB,kBAAkB;IACtC,MAAM,CAAC,OAAO,CAAC,eAAuC;QACnD,OAAO;YACH,cAAc,EAAE,eAAe,CAAC,eAAe;YAC/C,gBAAgB,EAAE,eAAe,CAAC,iBAAiB;YACnD,MAAM,EAAE,eAAe,CAAC,MAAM;SACjC,CAAA;IACJ,CAAC;CACD;AARD,qCAQC"}

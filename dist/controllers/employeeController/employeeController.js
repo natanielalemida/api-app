@@ -26,6 +26,16 @@ class EmployeeController {
             return yield this.employeeService.getEmployeeByOrganizationId(organizationId);
         });
     }
+    validateEmailAndPassword(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log(req.body);
+            const { email, password } = req.body;
+            const { verifyString } = (0, validator_1.default)();
+            verifyString(email);
+            verifyString(password);
+            return yield this.employeeService.validateEmailAndPassword(email, password);
+        });
+    }
 }
 exports.default = EmployeeController;
 //# sourceMappingURL=employeeController.js.map

@@ -2,6 +2,7 @@ import { userDto } from "../types/userTypes/userDto";
 
 interface Validator {
   verifyOrganizationNumber: (value: unknown) => void;
+  verifyString: (value: unknown) => void;
   verifyBodyUser: (body: userDto) => userDto
 }
 
@@ -17,6 +18,14 @@ export default function validator(): Validator {
 
   }
 
+  function verifyString(value: unknown): void {
+
+    if (typeof value !== "string") {
+      throw new Error("Invalid string");
+    }
+
+  }
+
   function verifyBodyUser(body: userDto) : userDto {
     return {
         organizationId: Number(body.organizationId),
@@ -27,6 +36,7 @@ export default function validator(): Validator {
 
   return {
     verifyOrganizationNumber,
+    verifyString,
     verifyBodyUser
   };
 }

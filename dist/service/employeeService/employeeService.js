@@ -13,14 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const employeeRepository_1 = __importDefault(require("../../repository/employeeRepository"));
+const organizationService_1 = __importDefault(require("../organizationService/organizationService"));
 class EmployeeService {
     constructor() {
         this.employeeRepository = new employeeRepository_1.default();
+        this.organizationService = new organizationService_1.default();
     }
     getEmployeeByOrganizationId(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
-            // TODO: verificar se a empresa existe
+            yield this.organizationService.verifyOrganizationById(organizationId);
             return yield this.employeeRepository.getEmployeeByOrganizationId(organizationId);
+        });
+    }
+    validateEmailAndPassword(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.employeeRepository.validateEmailAndPassword(email, password);
         });
     }
 }

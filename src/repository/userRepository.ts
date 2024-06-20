@@ -3,7 +3,7 @@ import connection from "../database/connetion";
 import { userDto } from "../types/userTypes/userDto";
 
 export default class UserRepository implements IUserRepository {
-  public async getUsers(organizationId: number): Promise<string[] | []> {
+  public async getUsers(organizationId: number): Promise<userDto[] | []> {
     const users = await connection('customers').select('*').where('organization_id', organizationId);
 
     if(!users.length) return []

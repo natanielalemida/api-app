@@ -7,6 +7,11 @@ function validator() {
             throw new Error("Invalid organization number");
         }
     }
+    function verifyString(value) {
+        if (typeof value !== "string") {
+            throw new Error("Invalid string");
+        }
+    }
     function verifyBodyUser(body) {
         return {
             organizationId: Number(body.organizationId),
@@ -16,6 +21,7 @@ function validator() {
     }
     return {
         verifyOrganizationNumber,
+        verifyString,
         verifyBodyUser
     };
 }

@@ -20,6 +20,7 @@ const port = 3000;
 app.use(express_1.default.json());
 const userController = new userController_1.default();
 const employeeController = new employeeController_1.default();
+/* CUSTOMERS SESSION */
 app.get('/customers/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(yield userController.getUsers(req));
 }));
@@ -27,9 +28,15 @@ app.post('/customers', (req, res) => __awaiter(void 0, void 0, void 0, function*
     const result = yield userController.createUser(req);
     return res.status(result.status).send(result.message);
 }));
+/* END SESSION */
+/* EMPLOYEE SESSION */
 app.get('/employee/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(yield employeeController.getEmployeeByOrganizationId(req));
 }));
+app.post('/auth', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.send(yield employeeController.validateEmailAndPassword(req));
+}));
+/* END SESSION */
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
