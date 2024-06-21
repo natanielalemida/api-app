@@ -1,6 +1,8 @@
 import connection from "../database/connetion";
 import IEmployeeRepository from "../interface/repository/IEmployeeRepository";
+import AuthMapper from "../mapper/authMapper";
 import EmployeeMapper from "../mapper/employeeMapper";
+import { AuthDto } from "../types/auth/authDto";
 import { EmployeeDto } from "../types/employee/employeeDto";
 import { EmployeeFromSqlDto } from "../types/employee/employeeFromSQLDto";
 
@@ -25,11 +27,13 @@ export default class EmployeeRepository implements IEmployeeRepository {
     return EmployeeMapper.mappOne(employees);
   }
 
-  public async validateEmailAndPassword(email: string, password: string) : Promise<boolean> {
+  public async validateEmailAndPassword(email: string, password: string) : Promise<AuthDto> {
     const result = await connection("employee").select('*').where('employee_email', email).andWhere('password', password).andWhere('active', 1).first()
 
-    if(!result) return false
+    if(!result) return {
+      status: false
+    }
 
-    return true
+    return AuthMapper.mappOne(result)
   };
 }

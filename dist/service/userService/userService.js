@@ -30,14 +30,29 @@ class UserService {
             return yield this.userRepository.getUserByCPF(CPF);
         });
     }
+    getUserId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.userRepository.getUserById(id);
+        });
+    }
     createUser(body) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.organizatioService.verifyOrganizationById(body.organizationId);
             const user = yield this.getUserCPF(body.cpf);
             if (user) {
-                throw new Error('Usuario ja cadastrado!');
+                throw new Error('already registered user!');
             }
             return yield this.userRepository.createUser(body);
+        });
+    }
+    editUser(body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.organizatioService.verifyOrganizationById(body.organizationId);
+            const user = yield this.getUserId(body.customersId);
+            if (!user) {
+                throw new Error('User not found!');
+            }
+            return yield this.userRepository.editUser(body);
         });
     }
 }

@@ -19,10 +19,19 @@ function validator() {
             cpf: body.cpf
         };
     }
+    function verifyBodyUserUpdate(body) {
+        return {
+            customersId: Number(body.customersId),
+            organizationId: Number(body.organizationId),
+            custurmesName: body.custurmesName,
+            cpf: body.cpf
+        };
+    }
     return {
         verifyOrganizationNumber,
         verifyString,
-        verifyBodyUser
+        verifyBodyUser,
+        verifyBodyUserUpdate
     };
 }
 exports.default = validator;

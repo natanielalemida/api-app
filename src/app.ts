@@ -22,6 +22,11 @@ app.post('/customers', async (req, res) => {
   return res.status(result.status).send(result.message);
 });
 
+app.put('/customers', async (req, res) => {
+  const result = await userController.editUser(req);
+  return res.status(result.status).send(result.message);
+});
+
 /* END SESSION */
 
 /* EMPLOYEE SESSION */

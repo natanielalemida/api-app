@@ -16,7 +16,9 @@ const connetion_1 = __importDefault(require("../database/connetion"));
 class UserRepository {
     getUsers(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield (0, connetion_1.default)('customers').select('*').where('organization_id', organizationId);
+            const users = yield (0, connetion_1.default)("customers")
+                .select("*")
+                .where("organization_id", organizationId);
             if (!users.length)
                 return [];
             return users;
@@ -24,7 +26,10 @@ class UserRepository {
     }
     getUserByCPF(CPF) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield (0, connetion_1.default)('customers').select('*').where('cpf', CPF).first();
+            const users = yield (0, connetion_1.default)("customers")
+                .select("*")
+                .where("cpf", CPF)
+                .first();
             if (!users)
                 return undefined;
             return users;
@@ -32,7 +37,10 @@ class UserRepository {
     }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const users = yield (0, connetion_1.default)('customers').select('*').where('id_customers', id).first();
+            const users = yield (0, connetion_1.default)("customers")
+                .select("id_customers", "cpf", "customers_name")
+                .where("id_customers", id)
+                .first();
             if (!users)
                 return undefined;
             return users;
@@ -40,15 +48,28 @@ class UserRepository {
     }
     createUser(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [user] = yield (0, connetion_1.default)('customers').insert({
+            const [user] = yield (0, connetion_1.default)("customers").insert({
                 organization_id: body.organizationId,
                 customers_name: body.custurmesName,
                 cpf: body.cpf,
             });
             const newUser = yield this.getUserById(user);
             if (!newUser)
-                throw new Error('Falha ao criar usuario!');
+                throw new Error("Falha ao criar usuario!");
             return user;
+        });
+    }
+    editUser(body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield (0, connetion_1.default)("customers")
+                .update({
+                organization_id: body.organizationId,
+                customers_name: body.custurmesName,
+                cpf: body.cpf,
+            })
+                .where("id_customers", body.customersId);
+            return yield this.getUserById(user);
+            ;
         });
     }
 }

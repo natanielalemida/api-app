@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const connetion_1 = __importDefault(require("../database/connetion"));
+const authMapper_1 = __importDefault(require("../mapper/authMapper"));
 const employeeMapper_1 = __importDefault(require("../mapper/employeeMapper"));
 class EmployeeRepository {
     getEmployeeByOrganizationId(organizationId) {
@@ -30,8 +31,10 @@ class EmployeeRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield (0, connetion_1.default)("employee").select('*').where('employee_email', email).andWhere('password', password).andWhere('active', 1).first();
             if (!result)
-                return false;
-            return true;
+                return {
+                    status: false
+                };
+            return authMapper_1.default.mappOne(result);
         });
     }
     ;

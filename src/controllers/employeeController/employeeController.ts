@@ -2,6 +2,7 @@
 import IEmployeeController from "../../interface/controllers/IEmployeeController";
 import validator from "../../middleware/validator";
 import EmployeeService from "../../service/employeeService/employeeService";
+import { AuthDto } from "../../types/auth/authDto";
 import { EmployeeDto } from "../../types/employee/employeeDto";
 
 export default class EmployeeController implements IEmployeeController {
@@ -18,7 +19,7 @@ export default class EmployeeController implements IEmployeeController {
     return await this.employeeService.getEmployeeByOrganizationId(organizationId);
   }
 
-  public async validateEmailAndPassword(req) : Promise<boolean> {
+  public async validateEmailAndPassword(req) : Promise<AuthDto> {
 
     console.log(req.body)
 

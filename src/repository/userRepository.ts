@@ -1,45 +1,66 @@
 import IUserRepository from "../interface/repository/IUserRepository";
 import connection from "../database/connetion";
 import { userDto } from "../types/userTypes/userDto";
+import { UserUpdateDto } from "../types/userTypes/userUpdateDto";
 
 export default class UserRepository implements IUserRepository {
   public async getUsers(organizationId: number): Promise<userDto[] | []> {
-    const users = await connection('customers').select('*').where('organization_id', organizationId);
+    const users = await connection("customers")
+      .select("*")
+      .where("organization_id", organizationId);
 
-    if(!users.length) return []
+    if (!users.length) return [];
 
-    return users
+    return users;
   }
 
   public async getUserByCPF(CPF: string): Promise<string | undefined> {
-    const users = await connection('customers').select('*').where('cpf', CPF).first();
+    const users = await connection("customers")
+      .select("*")
+      .where("cpf", CPF)
+      .first();
 
-    if(!users) return undefined
+    if (!users) return undefined;
 
-    return users
+    return users;
   }
 
-  public async getUserById(id: number): Promise<number | undefined> {
-    const users = await connection('customers').select('*').where('id_customers', id).first();
+  public async getUserById(id: number): Promise<userDto | undefined> {
+    const users = await connection("customers")
+      .select("id_customers", "cpf", "customers_name")
+      .where("id_customers", id)
+      .first();
 
-    if(!users) return undefined
+    if (!users) return undefined;
 
-    return users
+    return users;
   }
-
 
   public async createUser(body: userDto): Promise<number | undefined> {
-    const [user] = await connection('customers').insert({
+    const [user] = await connection("customers").insert({
+      organization_id: body.organizationId,
+      customers_name: body.custurmesName,
+      cpf: body.cpf,
+    });
+
+    const newUser = await this.getUserById(user);
+
+    if (!newUser) throw new Error("Falha ao criar usuario!");
+
+    return user;
+  }
+
+  public async editUser(
+    body: UserUpdateDto
+  ): Promise<userDto | undefined> {
+    const user = await connection("customers")
+      .update({
         organization_id: body.organizationId,
         customers_name: body.custurmesName,
         cpf: body.cpf,
-    })
+      })
+      .where("id_customers", body.customersId);
 
-    const newUser = await this.getUserById(user)
-
-    if(!newUser) throw new Error('Falha ao criar usuario!')
-
-    return user
+    return await this.getUserById(user);;
   }
-
 }

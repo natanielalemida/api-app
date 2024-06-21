@@ -37,6 +37,17 @@ class UserController {
             return { status: 200, message: 'User created successfully' };
         });
     }
+    editUser(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { verifyBodyUserUpdate } = (0, validator_1.default)();
+            const { body } = req;
+            const data = verifyBodyUserUpdate(body);
+            const creanteduser = yield this.userService.editUser(data);
+            if (!creanteduser)
+                return { status: 500, message: 'Cannot create user' };
+            return { status: 200, message: 'User edited successfully', body: creanteduser };
+        });
+    }
 }
 exports.default = UserController;
 //# sourceMappingURL=userController.js.map

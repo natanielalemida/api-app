@@ -1,9 +1,11 @@
 import { userDto } from "../types/userTypes/userDto";
+import { UserUpdateDto } from "../types/userTypes/userUpdateDto";
 
 interface Validator {
   verifyOrganizationNumber: (value: unknown) => void;
   verifyString: (value: unknown) => void;
   verifyBodyUser: (body: userDto) => userDto
+  verifyBodyUserUpdate: (body: UserUpdateDto) => UserUpdateDto
 }
 
 export default function validator(): Validator {
@@ -34,9 +36,19 @@ export default function validator(): Validator {
     }
   }
 
+  function verifyBodyUserUpdate(body: UserUpdateDto) : UserUpdateDto {
+    return {
+        customersId: Number(body.customersId),
+        organizationId: Number(body.organizationId),
+        custurmesName: body.custurmesName,
+        cpf: body.cpf
+    }
+  }
+
   return {
     verifyOrganizationNumber,
     verifyString,
-    verifyBodyUser
+    verifyBodyUser,
+    verifyBodyUserUpdate
   };
 }

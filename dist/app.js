@@ -28,6 +28,10 @@ app.post('/customers', (req, res) => __awaiter(void 0, void 0, void 0, function*
     const result = yield userController.createUser(req);
     return res.status(result.status).send(result.message);
 }));
+app.put('/customers', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield userController.editUser(req);
+    return res.status(result.status).send(result.message);
+}));
 /* END SESSION */
 /* EMPLOYEE SESSION */
 app.get('/employee/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
