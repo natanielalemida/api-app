@@ -18,4 +18,17 @@ export default class EmployeeService implements IEmployeeService {
   public async validateEmailAndPassword(email: string, password: string) : Promise<AuthDto> {
     return await this.employeeRepository.validateEmailAndPassword(email, password)
   }
+
+  public async getById(userId: number) : Promise<EmployeeDto | undefined> {
+    const user = await this.employeeRepository.getById(userId)
+
+    if(!user) throw new Error('User not found')
+
+    return user
+  }
+
+  public async deleteUser(userId: number) : Promise<boolean> {
+    await this.getById(userId)
+    return await this.employeeRepository.deleteUser(userId)
+  }
 }

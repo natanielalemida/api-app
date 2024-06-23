@@ -36,4 +36,23 @@ export default class EmployeeRepository implements IEmployeeRepository {
 
     return AuthMapper.mappOne(result)
   };
+
+  public async getById(userId: number) : Promise<EmployeeDto | undefined> {
+    const result = await connection("employee").select('*').where('id_employee', userId).andWhere('active', 1).first()
+
+    if(!result) undefined
+
+    const user = AuthMapper.mappOne(result)
+
+    return user.body
+  };
+
+  public async deleteUser(userId: number) : Promise<boolean> {
+    const result = await connection("employee").update({active: 0}).where('id_employee', userId)
+
+    if(!result) false
+
+    return true
+  };
+
 }

@@ -4,6 +4,7 @@ import validator from "../../middleware/validator";
 import EmployeeService from "../../service/employeeService/employeeService";
 import { AuthDto } from "../../types/auth/authDto";
 import { EmployeeDto } from "../../types/employee/employeeDto";
+import { statusDto } from "../../types/statusDto";
 
 export default class EmployeeController implements IEmployeeController {
   private employeeService = new EmployeeService();
@@ -21,8 +22,6 @@ export default class EmployeeController implements IEmployeeController {
 
   public async validateEmailAndPassword(req) : Promise<AuthDto> {
 
-    console.log(req.body)
-
     const { email, password} = req.body;
 
     const { verifyString } = validator();
@@ -31,6 +30,30 @@ export default class EmployeeController implements IEmployeeController {
     verifyString(password)
 
     return await this.employeeService.validateEmailAndPassword(email, password)
+  }
+
+  public async deleteUser(req) : Promise<statusDto> {
+
+    const { userId} = req.params;
+
+    const { verifyOrganizationNumber } = validator();
+
+    verifyOrganizationNumber(userId)
+
+    const user = await this.employeeService.deleteUser(userId)
+
+    if(!user) {
+      return {
+        status: 500,
+        message: "cannot delet user"
+      }
+    }
+
+    return {
+      status: 200,
+      message: "user deleted"
+    }
+
   }
 
 }
