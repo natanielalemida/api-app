@@ -72,6 +72,16 @@ class UserRepository {
             ;
         });
     }
+    deleteUser(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield (0, connetion_1.default)("customers")
+                .update({ active: 0 })
+                .where("id_customers", userId);
+            if (!user)
+                return undefined;
+            return true;
+        });
+    }
 }
 exports.default = UserRepository;
 //# sourceMappingURL=userRepository.js.map

@@ -28,12 +28,29 @@ class EmployeeController {
     }
     validateEmailAndPassword(req) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(req.body);
             const { email, password } = req.body;
             const { verifyString } = (0, validator_1.default)();
             verifyString(email);
             verifyString(password);
             return yield this.employeeService.validateEmailAndPassword(email, password);
+        });
+    }
+    deleteUser(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { userId } = req.params;
+            const { verifyOrganizationNumber } = (0, validator_1.default)();
+            verifyOrganizationNumber(userId);
+            const user = yield this.employeeService.deleteUser(userId);
+            if (!user) {
+                return {
+                    status: 500,
+                    message: "cannot delet user"
+                };
+            }
+            return {
+                status: 200,
+                message: "user deleted"
+            };
         });
     }
 }

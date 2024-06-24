@@ -52,4 +52,20 @@ export default class UserController implements IUserControler {
 
   }
 
+  public async deleteUser(req): Promise<statusDto> {
+
+    const { verifyOrganizationNumber } = validator();
+
+    const { userId } = req.params;
+
+     verifyOrganizationNumber(userId);
+
+    const creanteduser = await this.userService.deleteUser(userId)
+
+    if(!creanteduser) return { status: 500, message: 'Cannot delete user' }
+
+    return { status: 200, message: 'User deleted'};
+
+  }
+
 }

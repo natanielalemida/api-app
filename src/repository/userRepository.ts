@@ -63,4 +63,16 @@ export default class UserRepository implements IUserRepository {
 
     return await this.getUserById(user);;
   }
+
+  public async deleteUser(
+    userId: number
+  ): Promise<boolean> {
+    const user = await connection("customers")
+      .update({active: 0})
+      .where("id_customers", userId);
+
+    if(!user) return undefined
+
+    return true
+  }
 }

@@ -7,4 +7,5 @@ export default abstract class IUserRepository {
     abstract getUserById(id: number) : Promise<userDto | undefined>
     abstract createUser(body: userDto): Promise<number | undefined>
     abstract editUser(body: UserUpdateDto): Promise<userDto | undefined>
+    abstract deleteUser(userId: number): Promise<boolean>
 }

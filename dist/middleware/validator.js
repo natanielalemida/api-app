@@ -19,6 +19,13 @@ function validator() {
             cpf: body.cpf
         };
     }
+    function verifyProductBody(body) {
+        return {
+            organizationId: Number(body.organizationId),
+            productName: body.productCode,
+            productCode: body.productCode,
+        };
+    }
     function verifyBodyUserUpdate(body) {
         return {
             customersId: Number(body.customersId),
@@ -31,7 +38,8 @@ function validator() {
         verifyOrganizationNumber,
         verifyString,
         verifyBodyUser,
-        verifyBodyUserUpdate
+        verifyBodyUserUpdate,
+        verifyProductBody
     };
 }
 exports.default = validator;

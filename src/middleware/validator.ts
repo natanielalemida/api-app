@@ -1,3 +1,4 @@
+import { productCreateDto } from "../types/product/productCreateDto";
 import { userDto } from "../types/userTypes/userDto";
 import { UserUpdateDto } from "../types/userTypes/userUpdateDto";
 
@@ -6,6 +7,7 @@ interface Validator {
   verifyString: (value: unknown) => void;
   verifyBodyUser: (body: userDto) => userDto
   verifyBodyUserUpdate: (body: UserUpdateDto) => UserUpdateDto
+  verifyProductBody: (body: productCreateDto) => productCreateDto
 }
 
 export default function validator(): Validator {
@@ -36,6 +38,14 @@ export default function validator(): Validator {
     }
   }
 
+  function verifyProductBody(body: productCreateDto) : productCreateDto {
+    return {
+        organizationId: Number(body.organizationId),
+        productName: body.productCode,
+        productCode: body.productCode,
+    }
+  }
+
   function verifyBodyUserUpdate(body: UserUpdateDto) : UserUpdateDto {
     return {
         customersId: Number(body.customersId),
@@ -49,6 +59,7 @@ export default function validator(): Validator {
     verifyOrganizationNumber,
     verifyString,
     verifyBodyUser,
-    verifyBodyUserUpdate
+    verifyBodyUserUpdate,
+    verifyProductBody
   };
 }

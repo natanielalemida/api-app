@@ -38,6 +38,25 @@ class EmployeeRepository {
         });
     }
     ;
+    getById(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield (0, connetion_1.default)("employee").select('*').where('id_employee', userId).andWhere('active', 1).first();
+            if (!result)
+                undefined;
+            const user = authMapper_1.default.mappOne(result);
+            return user.body;
+        });
+    }
+    ;
+    deleteUser(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield (0, connetion_1.default)("employee").update({ active: 0 }).where('id_employee', userId);
+            if (!result)
+                false;
+            return true;
+        });
+    }
+    ;
 }
 exports.default = EmployeeRepository;
 //# sourceMappingURL=employeeRepository.js.map

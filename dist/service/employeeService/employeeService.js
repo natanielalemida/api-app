@@ -30,6 +30,20 @@ class EmployeeService {
             return yield this.employeeRepository.validateEmailAndPassword(email, password);
         });
     }
+    getById(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.employeeRepository.getById(userId);
+            if (!user)
+                throw new Error('User not found');
+            return user;
+        });
+    }
+    deleteUser(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.getById(userId);
+            return yield this.employeeRepository.deleteUser(userId);
+        });
+    }
 }
 exports.default = EmployeeService;
 //# sourceMappingURL=employeeService.js.map

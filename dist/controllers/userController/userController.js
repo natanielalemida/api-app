@@ -48,6 +48,17 @@ class UserController {
             return { status: 200, message: 'User edited successfully', body: creanteduser };
         });
     }
+    deleteUser(req) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { verifyOrganizationNumber } = (0, validator_1.default)();
+            const { userId } = req.params;
+            verifyOrganizationNumber(userId);
+            const creanteduser = yield this.userService.deleteUser(userId);
+            if (!creanteduser)
+                return { status: 500, message: 'Cannot delete user' };
+            return { status: 200, message: 'User deleted' };
+        });
+    }
 }
 exports.default = UserController;
 //# sourceMappingURL=userController.js.map

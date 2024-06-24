@@ -34,7 +34,7 @@ export default class EmployeeController implements IEmployeeController {
 
   public async deleteUser(req) : Promise<statusDto> {
 
-    const { userId} = req.params;
+    const { userId } = req.params;
 
     const { verifyOrganizationNumber } = validator();
 

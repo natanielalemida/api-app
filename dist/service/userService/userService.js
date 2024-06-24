@@ -32,27 +32,29 @@ class UserService {
     }
     getUserId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.userRepository.getUserById(id);
+            const user = yield this.userRepository.getUserById(id);
+            if (!user) {
+                throw new Error("user not registred");
+            }
+            return user;
         });
     }
     createUser(body) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.organizatioService.verifyOrganizationById(body.organizationId);
-            const user = yield this.getUserCPF(body.cpf);
-            if (user) {
-                throw new Error('already registered user!');
-            }
             return yield this.userRepository.createUser(body);
         });
     }
     editUser(body) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.organizatioService.verifyOrganizationById(body.organizationId);
-            const user = yield this.getUserId(body.customersId);
-            if (!user) {
-                throw new Error('User not found!');
-            }
             return yield this.userRepository.editUser(body);
+        });
+    }
+    deleteUser(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.getUserId(userId);
+            return yield this.userRepository.deleteUser(userId);
         });
     }
 }
