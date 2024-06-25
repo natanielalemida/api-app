@@ -16,9 +16,9 @@ export default class SaleRepository implements ISaleRepository {
   }
 
   public async getSoldById(saleId: number): Promise<SaleDto | undefined> {
-    const result = await connection("sale")
+    const result = await connection("sales")
       .select<SaleFromSQLDto>("*")
-      .where("saleId", saleId)
+      .where("sale_id", saleId)
       .first()
 
     if (!result) return undefined;
@@ -26,9 +26,10 @@ export default class SaleRepository implements ISaleRepository {
     return SaleMapper.mappOne(result);
   }
   public async createSale(body: SaleCreateDto): Promise<SaleDto | undefined> {
-    const [id] = await connection("sale").insert({
+    const [id] = await connection("sales").insert({
       product_id: body.productId,
       organization_id: body.organizationId,
+      sale_type_id: body.saleTypeId,
       sold_by: body.soldBy,
       user_id: body.userId ? body.userId : 0,
       amount: body.amount,
@@ -38,31 +39,33 @@ export default class SaleRepository implements ISaleRepository {
 
     const result = await this.getSoldById(id);
 
-    if (result) throw new Error("cannot create sale");
+    if (!result) throw new Error("cannot create sale");
 
     return result;
   }
 
   public async updateSold(body: SaleUpdateDto): Promise<SaleDto | undefined> {
-    const id = await connection("sale")
+    const id = await connection("sales")
       .update({
         product_id: body.productId,
         organization_id: body.organizationId,
         sold_by: body.soldBy,
+        sale_type_id: body.saleTypeId,
         user_id: body.userId ? body.userId : 0,
         amount: body.amount,
         created_at: new Date(body.createdAt),
-        updated_at: null,
+        updated_at: new Date(),
       })
       .where("sale_id", body.saleId);
 
     if (!id) throw new Error("cannot edit sale");
+
     return await this.getSoldById(body.saleId);
   }
 
   public async deleteSold(soldId: number): Promise<boolean> {
-    const id = await connection("sale")
-      .update({ active: 1 })
+    const id = await connection("sales")
+      .update({ active: 0 })
       .where("sale_id", soldId);
 
     if (!id) throw new Error("cannot delete sale");

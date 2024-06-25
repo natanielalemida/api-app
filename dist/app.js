@@ -16,12 +16,35 @@ const express_1 = __importDefault(require("express"));
 const userController_1 = __importDefault(require("./controllers/userController/userController"));
 const employeeController_1 = __importDefault(require("./controllers/employeeController/employeeController"));
 const productController_1 = __importDefault(require("./controllers/productController/productController"));
+const saleController_1 = __importDefault(require("./controllers/saleController/saleController"));
 const app = (0, express_1.default)();
 const port = 3000;
 app.use(express_1.default.json());
+const saleController = new saleController_1.default();
 const userController = new userController_1.default();
 const employeeController = new employeeController_1.default();
 const productController = new productController_1.default();
+/* SALE SESSION*/
+app.get('/sales/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.send(yield saleController.getSolds(req));
+}));
+app.get('/sale/:saleId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield saleController.getSoldById(req);
+    return res.status(result.status).send(result.body);
+}));
+app.post('/sale', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield saleController.createSale(req);
+    return res.status(result.status).send(result.message);
+}));
+app.put('/sale', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield saleController.updateSold(req);
+    return res.status(result.status).send(result.message);
+}));
+app.delete('/sale/:saleId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield saleController.deleteSold(req);
+    return res.status(result.status).send(result.message);
+}));
+/* END SESSION */
 /* PRODUCTS SESSION */
 app.get('/products/:organizationId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send(yield productController.getProducts(req));

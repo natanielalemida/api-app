@@ -13,9 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const productRepository_1 = __importDefault(require("../../repository/productRepository"));
+const organizationService_1 = __importDefault(require("../organizationService/organizationService"));
 class ProductService {
     constructor() {
         this.productRepository = new productRepository_1.default();
+        this.organizationSerivce = new organizationService_1.default();
     }
     getProductById(productId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -25,8 +27,17 @@ class ProductService {
             return product;
         });
     }
+    validatorProduct(productId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const product = yield this.getProductById(productId);
+            if (!product)
+                throw new Error("product not found");
+            return product;
+        });
+    }
     getProducts(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this.organizationSerivce.verifyOrganizationById(organizationId);
             return yield this.productRepository.getProducts(organizationId);
         });
     }

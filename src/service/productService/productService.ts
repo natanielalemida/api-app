@@ -6,7 +6,7 @@ import OrganizationService from "../organizationService/organizationService";
 
 export default class ProductService implements IProductService {
   private productRepository = new ProductRepository();
-  private organizationSerivce= new OrganizationService()
+  private organizationSerivce = new OrganizationService();
 
   public async getProductById(
     productId: number
@@ -18,8 +18,18 @@ export default class ProductService implements IProductService {
     return product;
   }
 
+  public async validatorProduct(
+    productId: number
+  ): Promise<ProductDto | undefined> {
+    const product = await this.getProductById(productId);
+
+    if (!product) throw new Error("product not found");
+
+    return product;
+  }
+
   public async getProducts(organizationId: number): Promise<ProductDto[]> {
-    await this.organizationSerivce.verifyOrganizationById(organizationId)
+    await this.organizationSerivce.verifyOrganizationById(organizationId);
     return await this.productRepository.getProducts(organizationId);
   }
 

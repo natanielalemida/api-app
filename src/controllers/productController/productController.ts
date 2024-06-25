@@ -55,9 +55,9 @@ export default class ProductController implements IProductController {
 
       const { body } = req;
 
-      const { verifyProductBody } = validator()
+      const { verifyProductBodyUpdate } = validator()
 
-      verifyProductBody(body)
+      verifyProductBodyUpdate(body)
 
       const product = await this.productService.editProduct(body)
 

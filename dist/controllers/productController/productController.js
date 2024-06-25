@@ -51,8 +51,8 @@ class ProductController {
     editProduct(req) {
         return __awaiter(this, void 0, void 0, function* () {
             const { body } = req;
-            const { verifyProductBody } = (0, validator_1.default)();
-            verifyProductBody(body);
+            const { verifyProductBodyUpdate } = (0, validator_1.default)();
+            verifyProductBodyUpdate(body);
             const product = yield this.productService.editProduct(body);
             if (!product)
                 return { status: 200, message: "cannot edited product" };

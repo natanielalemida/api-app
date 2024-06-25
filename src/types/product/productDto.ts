@@ -1,6 +1,6 @@
 export type ProductDto = {
     productId: number,
     organizationId: number,
-    productName: number,
-    productCode: number,
+    productName: string,
+    productCode: string,
 }

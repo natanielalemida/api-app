@@ -7,4 +7,5 @@ export type SaleFromSQLDto = {
   amount: string;
   created_at: Date;
   updated_at: Date;
+  sale_type_id: number;
 };

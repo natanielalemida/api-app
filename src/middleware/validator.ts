@@ -1,4 +1,7 @@
 import { productCreateDto } from "../types/product/productCreateDto";
+import { ProductDto } from "../types/product/productDto";
+import { SaleCreateDto } from "../types/sale/saleCreateDto";
+import { SaleUpdateDto } from "../types/sale/saleUpdateDto";
 import { userDto } from "../types/userTypes/userDto";
 import { UserUpdateDto } from "../types/userTypes/userUpdateDto";
 
@@ -8,6 +11,9 @@ interface Validator {
   verifyBodyUser: (body: userDto) => userDto
   verifyBodyUserUpdate: (body: UserUpdateDto) => UserUpdateDto
   verifyProductBody: (body: productCreateDto) => productCreateDto
+  verifyProductBodyUpdate: (body: ProductDto) => ProductDto
+  verifySaleBodyUpdate: (body: SaleUpdateDto) => SaleUpdateDto
+  verifySaleBody: (body: SaleCreateDto) => SaleCreateDto
 }
 
 export default function validator(): Validator {
@@ -46,6 +52,41 @@ export default function validator(): Validator {
     }
   }
 
+  function verifyProductBodyUpdate(body: ProductDto) : ProductDto {
+    return {
+        productId: Number(body.productId),
+        organizationId: Number(body.organizationId),
+        productName: body.productCode,
+        productCode: body.productCode,
+    }
+  }
+
+  function verifySaleBodyUpdate(body: SaleUpdateDto) : SaleUpdateDto {
+    return {
+      saleId: body.saleId,
+      productId: body.productId,
+      organizationId: body.organizationId,
+      saleTypeId: body.saleTypeId,
+      soldBy: body.soldBy,
+      userId: body.userId,
+      amount: body.amount,
+      createdAt: body.createdAt,
+      updateAt: body.updateAt
+    }
+  }
+
+  function verifySaleBody(body: SaleCreateDto) : SaleCreateDto {
+    return {
+      productId: body.productId,
+      organizationId: body.organizationId,
+      saleTypeId: body.saleTypeId,
+      soldBy: body.soldBy,
+      userId: body.userId,
+      amount: body.amount,
+      createdAt: body.createdAt
+    }
+  }
+
   function verifyBodyUserUpdate(body: UserUpdateDto) : UserUpdateDto {
     return {
         customersId: Number(body.customersId),
@@ -60,6 +101,9 @@ export default function validator(): Validator {
     verifyString,
     verifyBodyUser,
     verifyBodyUserUpdate,
-    verifyProductBody
+    verifyProductBody,
+    verifyProductBodyUpdate,
+    verifySaleBodyUpdate,
+    verifySaleBody
   };
 }

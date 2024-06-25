@@ -3,11 +3,15 @@ import SaleRepository from "../../repository/saleRepository";
 import { SaleCreateDto } from "../../types/sale/saleCreateDto";
 import { SaleDto } from "../../types/sale/saleDto";
 import { SaleUpdateDto } from "../../types/sale/saleUpdateDto";
+import EmployeeService from "../employeeService/employeeService";
 import OrganizationService from "../organizationService/organizationService";
+import ProductService from "../productService/productService";
 
 export default class SaleService implements ISaleService {
   private saleRepository = new SaleRepository();
   private organizationService = new OrganizationService();
+  private employeeService = new EmployeeService()
+  private productService = new ProductService()
 
   public async getSolds(organizationId: number): Promise<SaleDto[]> {
     await this.organizationService.verifyOrganizationById(organizationId);
@@ -23,6 +27,11 @@ export default class SaleService implements ISaleService {
   }
 
   public async createSale(body: SaleCreateDto): Promise<SaleDto | undefined> {
+
+    await this.productService.validatorProduct(body.productId)
+    await this.organizationService.verifyOrganizationById(body.organizationId);
+    await this.employeeService.getById(body.soldBy)
+
     const sale = await this.saleRepository.createSale(body);
 
     if (!sale) throw new Error("cannot create user");
@@ -31,6 +40,12 @@ export default class SaleService implements ISaleService {
   }
 
   public async updateSold(body: SaleUpdateDto): Promise<SaleDto> {
+
+    await this.productService.validatorProduct(body.productId)
+    await this.organizationService.verifyOrganizationById(body.organizationId);
+    await this.employeeService.getById(body.soldBy)
+
+
     const sale = await this.saleRepository.updateSold(body);
 
     if (!sale) throw new Error("cannot update user");

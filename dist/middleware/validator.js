@@ -26,6 +26,38 @@ function validator() {
             productCode: body.productCode,
         };
     }
+    function verifyProductBodyUpdate(body) {
+        return {
+            productId: Number(body.productId),
+            organizationId: Number(body.organizationId),
+            productName: body.productCode,
+            productCode: body.productCode,
+        };
+    }
+    function verifySaleBodyUpdate(body) {
+        return {
+            saleId: body.saleId,
+            productId: body.productId,
+            organizationId: body.organizationId,
+            saleTypeId: body.saleTypeId,
+            soldBy: body.soldBy,
+            userId: body.userId,
+            amount: body.amount,
+            createdAt: body.createdAt,
+            updateAt: body.updateAt
+        };
+    }
+    function verifySaleBody(body) {
+        return {
+            productId: body.productId,
+            organizationId: body.organizationId,
+            saleTypeId: body.saleTypeId,
+            soldBy: body.soldBy,
+            userId: body.userId,
+            amount: body.amount,
+            createdAt: body.createdAt
+        };
+    }
     function verifyBodyUserUpdate(body) {
         return {
             customersId: Number(body.customersId),
@@ -39,7 +71,10 @@ function validator() {
         verifyString,
         verifyBodyUser,
         verifyBodyUserUpdate,
-        verifyProductBody
+        verifyProductBody,
+        verifyProductBodyUpdate,
+        verifySaleBodyUpdate,
+        verifySaleBody
     };
 }
 exports.default = validator;

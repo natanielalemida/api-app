@@ -2,6 +2,7 @@ import express from 'express';
 import UserController from './controllers/userController/userController';
 import EmployeeController from './controllers/employeeController/employeeController';
 import ProductController from './controllers/productController/productController';
+import SaleController from './controllers/saleController/saleController';
 
 const app = express();
 
@@ -9,9 +10,39 @@ const port = 3000;
 
 app.use(express.json());
 
+const saleController = new SaleController()
 const userController = new UserController()
 const employeeController = new EmployeeController()
 const productController = new ProductController()
+
+/* SALE SESSION*/
+
+app.get('/sales/:organizationId', async (req, res) => {
+  res.send(await saleController.getSolds(req))
+});
+
+app.get('/sale/:saleId', async (req, res) => {
+  const result = await saleController.getSoldById(req)
+  return res.status(result.status).send(result.body);
+});
+
+app.post('/sale', async (req, res) => {
+  const result = await saleController.createSale(req)
+  return res.status(result.status).send(result.message);
+});
+
+app.put('/sale', async (req, res) => {
+  const result = await saleController.updateSold(req);
+  return res.status(result.status).send(result.message);
+});
+
+app.delete('/sale/:saleId', async (req, res) => {
+  const result = await saleController.deleteSold(req);
+  return res.status(result.status).send(result.message);
+});
+
+/* END SESSION */
+
 
 /* PRODUCTS SESSION */
 
