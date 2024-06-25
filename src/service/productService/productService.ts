@@ -2,9 +2,11 @@ import IProductService from "../../interface/service/IProductService";
 import ProductRepository from "../../repository/productRepository";
 import { productCreateDto } from "../../types/product/productCreateDto";
 import { ProductDto } from "../../types/product/productDto";
+import OrganizationService from "../organizationService/organizationService";
 
 export default class ProductService implements IProductService {
   private productRepository = new ProductRepository();
+  private organizationSerivce= new OrganizationService()
 
   public async getProductById(
     productId: number
@@ -17,6 +19,7 @@ export default class ProductService implements IProductService {
   }
 
   public async getProducts(organizationId: number): Promise<ProductDto[]> {
+    await this.organizationSerivce.verifyOrganizationById(organizationId)
     return await this.productRepository.getProducts(organizationId);
   }
 
