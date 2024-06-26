@@ -7,7 +7,8 @@ export default class UserRepository implements IUserRepository {
   public async getUsers(organizationId: number): Promise<userDto[] | []> {
     const users = await connection("customers")
       .select("*")
-      .where("organization_id", organizationId);
+      .where("organization_id", organizationId)
+      .andWhere("active", 1)
 
     if (!users.length) return [];
 

@@ -6,6 +6,7 @@ export type AuthDto = {
 
 type UserDto = {
     idEmployee: number,
+    organizationId: number,
     employeeName: string,
     employeeEmail: string,
     employeeCpf: string,

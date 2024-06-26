@@ -7,6 +7,7 @@ class AuthMapper {
             body: {
                 idEmployee: entity.id_employee,
                 employeeCpf: entity.employee_cpf,
+                organizationId: entity.organization_id,
                 employeeEmail: entity.employee_email,
                 employeeName: entity.employee_name,
                 employeePhone: entity.employee_phone,

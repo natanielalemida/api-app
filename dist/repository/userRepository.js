@@ -18,7 +18,8 @@ class UserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const users = yield (0, connetion_1.default)("customers")
                 .select("*")
-                .where("organization_id", organizationId);
+                .where("organization_id", organizationId)
+                .andWhere("active", 1);
             if (!users.length)
                 return [];
             return users;
