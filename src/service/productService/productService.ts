@@ -13,7 +13,7 @@ export default class ProductService implements IProductService {
   ): Promise<ProductDto | undefined> {
     const product = await this.productRepository.getProductById(productId);
 
-    if (!product) throw new Error("user not found");
+    if (!product) throw new Error("product not found");
 
     return product;
   }
@@ -28,10 +28,16 @@ export default class ProductService implements IProductService {
     return product;
   }
 
+  public async getLastModifyQuantity(productId, saleId) : Promise<number> {
+   await this.getProductById(productId)
+   return await this.productRepository.getLastModifyQuantity(productId, saleId)
+  }
+
   public async getProducts(organizationId: number): Promise<ProductDto[]> {
     await this.organizationSerivce.verifyOrganizationById(organizationId);
     return await this.productRepository.getProducts(organizationId);
   }
+
 
   public async createProducts(
     body: productCreateDto

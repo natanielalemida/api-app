@@ -10,8 +10,8 @@ import ProductService from "../productService/productService";
 export default class SaleService implements ISaleService {
   private saleRepository = new SaleRepository();
   private organizationService = new OrganizationService();
-  private employeeService = new EmployeeService()
-  private productService = new ProductService()
+  private employeeService = new EmployeeService();
+  private productService = new ProductService();
 
   public async getSolds(organizationId: number): Promise<SaleDto[]> {
     await this.organizationService.verifyOrganizationById(organizationId);
@@ -27,28 +27,71 @@ export default class SaleService implements ISaleService {
   }
 
   public async createSale(body: SaleCreateDto): Promise<SaleDto | undefined> {
+    const { products } = body;
 
-    await this.productService.validatorProduct(body.productId)
     await this.organizationService.verifyOrganizationById(body.organizationId);
-    await this.employeeService.getById(body.soldBy)
+    await this.employeeService.getById(body.soldBy);
 
     const sale = await this.saleRepository.createSale(body);
 
-    if (!sale) throw new Error("cannot create user");
+    if (!sale) throw new Error("cannot create sale");
+
+    await Promise.all(
+      products.map(async (product) => {
+        const data = await this.productService.validatorProduct(
+          product.productId
+        );
+
+        if (data.productQuantity < product.productQuantity) {
+          throw new Error("quantity big than disponibility");
+        }
+
+        await this.productService.editProduct({
+          ...product,
+          productQuantity: data.productQuantity - product.productQuantity,
+        });
+      })
+    );
 
     return sale;
   }
 
   public async updateSold(body: SaleUpdateDto): Promise<SaleDto> {
+    const { products } = body;
 
-    await this.productService.validatorProduct(body.productId)
+    await Promise.all(
+      products.map(async (product) => {
+        const data = await this.productService.validatorProduct(
+          product.productId
+        );
+
+        const { quantity } = await this.productService.getLastModifyQuantity(
+          product.productId,
+          body.saleId
+        );
+
+        const newIndex = quantity - product.productQuantity;
+
+        const agoraVai = data.productQuantity + newIndex;
+
+        if (data.productQuantity < newIndex) {
+          throw new Error("quantity big than disponibility");
+        }
+
+
+        await this.productService.editProduct({
+          ...product,
+          productQuantity: agoraVai,
+        });
+      })
+    );
+
     await this.organizationService.verifyOrganizationById(body.organizationId);
-    await this.employeeService.getById(body.soldBy)
-
+    await this.employeeService.getById(body.soldBy);
 
     const sale = await this.saleRepository.updateSold(body);
 
-    if (!sale) throw new Error("cannot update user");
+    if (!sale) throw new Error("cannot update sale");
 
     return sale;
   }

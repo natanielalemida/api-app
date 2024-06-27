@@ -1,6 +1,8 @@
+import { ProductDto } from "../product/productDto";
+
 export type SaleUpdateDto = {
   saleId: number;
-  productId: number;
+  products: ProductDto[];
   organizationId: number;
   saleTypeId: number;
   soldBy: number;

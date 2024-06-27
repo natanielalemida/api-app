@@ -23,7 +23,7 @@ class ProductService {
         return __awaiter(this, void 0, void 0, function* () {
             const product = yield this.productRepository.getProductById(productId);
             if (!product)
-                throw new Error("user not found");
+                throw new Error("product not found");
             return product;
         });
     }
@@ -33,6 +33,12 @@ class ProductService {
             if (!product)
                 throw new Error("product not found");
             return product;
+        });
+    }
+    getLastModifyQuantity(productId, saleId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.getProductById(productId);
+            return yield this.productRepository.getLastModifyQuantity(productId, saleId);
         });
     }
     getProducts(organizationId) {

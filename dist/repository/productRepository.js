@@ -27,6 +27,16 @@ class ProductRepository {
             return productMapper_1.default.mappOne(data);
         });
     }
+    getLastModifyQuantity(productId, saleId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield (0, connetion_1.default)("sale_product")
+                .select("quantity")
+                .where("product_id", productId)
+                .andWhere("sale_id", saleId)
+                .andWhere("active", 1)
+                .first();
+        });
+    }
     getProductByCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield (0, connetion_1.default)("product")
@@ -56,6 +66,8 @@ class ProductRepository {
                 organization_id: body.organizationId,
                 product_name: body.productName,
                 product_code: body.productCode,
+                product_quantity: body.productQuantity,
+                price: body.productPrice,
             });
             const product = yield this.getProductById(productId);
             if (!product)
@@ -70,6 +82,8 @@ class ProductRepository {
                 organization_id: body.organizationId,
                 product_name: body.productName,
                 product_code: body.productCode,
+                product_quantity: body.productQuantity,
+                price: body.productPrice,
             })
                 .where("product_id", body.productId)
                 .andWhere("active", 1);

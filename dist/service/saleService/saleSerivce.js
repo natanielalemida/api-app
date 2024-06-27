@@ -39,23 +39,40 @@ class SaleService {
     }
     createSale(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.productService.validatorProduct(body.productId);
+            const { products } = body;
             yield this.organizationService.verifyOrganizationById(body.organizationId);
             yield this.employeeService.getById(body.soldBy);
             const sale = yield this.saleRepository.createSale(body);
             if (!sale)
-                throw new Error("cannot create user");
+                throw new Error("cannot create sale");
+            yield Promise.all(products.map((product) => __awaiter(this, void 0, void 0, function* () {
+                const data = yield this.productService.validatorProduct(product.productId);
+                if (data.productQuantity < product.productQuantity) {
+                    throw new Error("quantity big than disponibility");
+                }
+                yield this.productService.editProduct(Object.assign(Object.assign({}, product), { productQuantity: data.productQuantity - product.productQuantity }));
+            })));
             return sale;
         });
     }
     updateSold(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.productService.validatorProduct(body.productId);
+            const { products } = body;
             yield this.organizationService.verifyOrganizationById(body.organizationId);
             yield this.employeeService.getById(body.soldBy);
             const sale = yield this.saleRepository.updateSold(body);
             if (!sale)
-                throw new Error("cannot update user");
+                throw new Error("cannot update sale");
+            yield Promise.all(products.map((product) => __awaiter(this, void 0, void 0, function* () {
+                const data = yield this.productService.validatorProduct(product.productId);
+                const { quantity } = yield this.productService.getLastModifyQuantity(product.productId, body.saleId);
+                const newIndex = quantity - product.productQuantity;
+                const agoraVai = data.productQuantity + newIndex;
+                if (data.productQuantity < newIndex) {
+                    throw new Error("quantity big than disponibility");
+                }
+                yield this.productService.editProduct(Object.assign(Object.assign({}, product), { productQuantity: agoraVai }));
+            })));
             return sale;
         });
     }

@@ -20,6 +20,18 @@ export default class ProductRepository implements IProductRepository {
     return ProductMapper.mappOne(data);
   }
 
+  public async getLastModifyQuantity(
+    productId: number,
+    saleId: number
+  ): Promise<number> {
+    return await connection("sale_product")
+      .select<number>("quantity")
+      .where("product_id", productId)
+      .andWhere("sale_id", saleId)
+      .andWhere("active", 1)
+      .first();
+  }
+
   public async getProductByCode(code: string): Promise<ProductDto | undefined> {
     const data = await connection("product")
       .select<ProductFromSQLDto>("*")
@@ -50,6 +62,8 @@ export default class ProductRepository implements IProductRepository {
       organization_id: body.organizationId,
       product_name: body.productName,
       product_code: body.productCode,
+      product_quantity: body.productQuantity,
+      price: body.productPrice,
     });
 
     const product = await this.getProductById(productId);
@@ -65,6 +79,8 @@ export default class ProductRepository implements IProductRepository {
         organization_id: body.organizationId,
         product_name: body.productName,
         product_code: body.productCode,
+        product_quantity: body.productQuantity,
+        price: body.productPrice,
       })
       .where("product_id", body.productId)
       .andWhere("active", 1);

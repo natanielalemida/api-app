@@ -24,6 +24,8 @@ function validator() {
             organizationId: Number(body.organizationId),
             productName: body.productCode,
             productCode: body.productCode,
+            productPrice: body.productPrice,
+            productQuantity: body.productQuantity
         };
     }
     function verifyProductBodyUpdate(body) {
@@ -32,6 +34,8 @@ function validator() {
             organizationId: Number(body.organizationId),
             productName: body.productCode,
             productCode: body.productCode,
+            productPrice: body.productPrice,
+            productQuantity: body.productQuantity
         };
     }
     function verifySaleBodyUpdate(body) {
@@ -49,7 +53,7 @@ function validator() {
     }
     function verifySaleBody(body) {
         return {
-            productId: body.productId,
+            products: body.products,
             organizationId: body.organizationId,
             saleTypeId: body.saleTypeId,
             soldBy: body.soldBy,

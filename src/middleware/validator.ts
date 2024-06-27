@@ -49,6 +49,8 @@ export default function validator(): Validator {
         organizationId: Number(body.organizationId),
         productName: body.productCode,
         productCode: body.productCode,
+        productPrice: body.productPrice,
+        productQuantity: body.productQuantity
     }
   }
 
@@ -58,6 +60,8 @@ export default function validator(): Validator {
         organizationId: Number(body.organizationId),
         productName: body.productCode,
         productCode: body.productCode,
+        productPrice: body.productPrice,
+        productQuantity: body.productQuantity
     }
   }
 
@@ -77,7 +81,7 @@ export default function validator(): Validator {
 
   function verifySaleBody(body: SaleCreateDto) : SaleCreateDto {
     return {
-      productId: body.productId,
+      products: body.products,
       organizationId: body.organizationId,
       saleTypeId: body.saleTypeId,
       soldBy: body.soldBy,

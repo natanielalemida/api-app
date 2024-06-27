@@ -10,4 +10,8 @@ export default abstract class IProductRepository {
   abstract editProduct(body: ProductDto): Promise<ProductDto | undefined>;
   abstract deleteProduct(productId: number): Promise<boolean>;
   abstract getProductByCode(code: string): Promise<ProductDto | undefined>;
+  abstract getLastModifyQuantity(
+    productId: number,
+    saleId: number
+  ): Promise<number>;
 }

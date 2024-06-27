@@ -18,9 +18,9 @@ export default class ProductController implements IProductController {
       
        const product = await this.productService.getProductById(productId)
 
-       if(!product) return {status: 200, message: "product not found"}
+       if(!product) return {status: 400, message: "product not found"}
 
-       return {status: 400, message: "product found", body: product}
+       return {status: 200, message: "product found", body: product}
      }
 
      public async getProducts(req) : Promise<ProductDto[]> {
@@ -45,7 +45,7 @@ export default class ProductController implements IProductController {
 
       const product = await this.productService.createProducts(body)
 
-      if(!product) return {status: 200, message: "cannot create product"}
+      if(!product) return {status: 400, message: "cannot create product"}
 
       return { status: 200, message: "product created", body: product}
 
@@ -61,7 +61,7 @@ export default class ProductController implements IProductController {
 
       const product = await this.productService.editProduct(body)
 
-      if(!product) return {status: 200, message: "cannot edited product"}
+      if(!product) return {status: 400, message: "cannot edited product"}
 
       return { status: 200, message: "product edited", body: product}
 
@@ -77,10 +77,10 @@ export default class ProductController implements IProductController {
     
      const product = await this.productService.deleteProduct(productId)
 
-     if(!product) return {status: 200, message: "cannot delete product"}
+     if(!product) return {status: 400, message: "cannot delete product"}
 
      return {
-      status: 400,
+      status: 200,
       message: "product deleted"
      }
 

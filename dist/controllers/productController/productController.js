@@ -25,8 +25,8 @@ class ProductController {
             verifyOrganizationNumber(productId);
             const product = yield this.productService.getProductById(productId);
             if (!product)
-                return { status: 200, message: "product not found" };
-            return { status: 400, message: "product found", body: product };
+                return { status: 400, message: "product not found" };
+            return { status: 200, message: "product found", body: product };
         });
     }
     getProducts(req) {
@@ -44,7 +44,7 @@ class ProductController {
             verifyProductBody(body);
             const product = yield this.productService.createProducts(body);
             if (!product)
-                return { status: 200, message: "cannot create product" };
+                return { status: 400, message: "cannot create product" };
             return { status: 200, message: "product created", body: product };
         });
     }
@@ -55,7 +55,7 @@ class ProductController {
             verifyProductBodyUpdate(body);
             const product = yield this.productService.editProduct(body);
             if (!product)
-                return { status: 200, message: "cannot edited product" };
+                return { status: 400, message: "cannot edited product" };
             return { status: 200, message: "product edited", body: product };
         });
     }
@@ -66,9 +66,9 @@ class ProductController {
             verifyOrganizationNumber(productId);
             const product = yield this.productService.deleteProduct(productId);
             if (!product)
-                return { status: 200, message: "cannot delete product" };
+                return { status: 400, message: "cannot delete product" };
             return {
-                status: 400,
+                status: 200,
                 message: "product deleted"
             };
         });

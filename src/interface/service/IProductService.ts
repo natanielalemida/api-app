@@ -10,4 +10,5 @@ export default abstract class IProductService {
   abstract editProduct(body: ProductDto): Promise<ProductDto | undefined>;
   abstract deleteProduct(productId: number): Promise<boolean>;
   abstract validatorProduct(productId: number): Promise<ProductDto | undefined>;
+  abstract getLastModifyQuantity(productId, saleId) : Promise<number>
 }

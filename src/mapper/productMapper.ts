@@ -8,6 +8,8 @@ export default class ProductMapper {
       organizationId: productDto.organization_id,
       productName: productDto.product_name,
       productCode: productDto.product_code,
+      productPrice: productDto.price,
+      productQuantity: productDto.product_quantity,
     };
   }
 
@@ -18,6 +20,8 @@ export default class ProductMapper {
             organizationId: productDto.organization_id,
             productName: productDto.product_name,
             productCode: productDto.product_code,
+            productPrice: productDto.price,
+            productQuantity: productDto.product_quantity,
           };
     })
   }
