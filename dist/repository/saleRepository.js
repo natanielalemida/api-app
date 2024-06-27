@@ -18,18 +18,54 @@ class SaleRepository {
     getSolds(organizationId) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield (0, connetion_1.default)("sales")
-                .select("*")
-                .where("organization_id", organizationId)
-                .andWhere("active", 1);
+                .innerJoin("sale_product", "sale_product.sale_id", "sales.sale_id")
+                .innerJoin("sale_type", "sale_type.sale_type_id", "sales.sale_type_id")
+                .innerJoin("product", "product.product_id", "sale_product.product_id")
+                .select([
+                "sales.sale_id",
+                "sales.sold_by",
+                "sales.organization_id",
+                "sales.user_id",
+                "sales.amount",
+                "sales.created_at",
+                "sales.updated_at",
+                "sales.sale_type_id",
+                "sale_type.sale_type_name",
+                "sale_product.quantity as sale_product_quantity",
+                "sale_product.price as sale_product_price",
+                "sale_product.price as sale_product_product_id",
+                "product.product_name as product_name",
+            ])
+                .where("sales.organization_id", organizationId)
+                .andWhere("sale_product.active", 1)
+                .andWhere("sales.active", 1);
             return saleMapper_1.default.mappQuery(result);
         });
     }
     getSoldById(saleId) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield (0, connetion_1.default)("sales")
-                .select("*")
-                .where("sale_id", saleId)
-                .first();
+                .innerJoin("sale_product", "sale_product.sale_id", "sales.sale_id")
+                .innerJoin("sale_type", "sale_type.sale_type_id", "sales.sale_type_id")
+                .innerJoin("product", "product.product_id", "sale_product.product_id")
+                .select([
+                "sales.sale_id",
+                "sales.sold_by",
+                "sales.organization_id",
+                "sales.user_id",
+                "sales.amount",
+                "sales.created_at",
+                "sales.updated_at",
+                "sales.sale_type_id",
+                "sale_type.sale_type_name",
+                "sale_product.quantity as sale_product_quantity",
+                "sale_product.price as sale_product_price",
+                "sale_product.price as sale_product_product_id",
+                "product.product_name as product_name",
+            ])
+                .where("sales.sale_id", saleId)
+                .andWhere("active", 1)
+                .andWhere("sale_product.active", 1);
             if (!result)
                 return undefined;
             return saleMapper_1.default.mappOne(result);
@@ -116,12 +152,16 @@ class SaleRepository {
     transactionUpdateProduct(transaction, saleId, products) {
         return __awaiter(this, void 0, void 0, function* () {
             Promise.all(products.map((product) => __awaiter(this, void 0, void 0, function* () {
-                return yield transaction("sale_product").update({
+                return yield transaction("sale_product")
+                    .update({
                     product_id: product.productId,
                     quantity: product.productQuantity,
                     price: product.productPrice,
                     sale_id: saleId,
-                }).where("product_id", product.productId).andWhere('sale_id', saleId).andWhere('active', 1);
+                })
+                    .where("product_id", product.productId)
+                    .andWhere("sale_id", saleId)
+                    .andWhere("active", 1);
             })));
         });
     }

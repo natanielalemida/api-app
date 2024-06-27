@@ -2,30 +2,54 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class SaleMapper {
     static mappQuery(body) {
-        return body.map((currentSale) => {
-            return {
-                saleId: currentSale.sale_id,
-                productId: currentSale.product_id,
-                organizationId: currentSale.organization_id,
-                saleTypeId: currentSale.sale_type_id,
-                soldBy: currentSale.sold_by,
-                userId: currentSale.user_id,
-                amount: currentSale.amount,
-                createdAt: currentSale.created_at,
-            };
-        });
+        const salesMap = body.reduce((acc, curr) => {
+            if (!acc[curr.sale_id]) {
+                acc[curr.sale_id] = {
+                    saleId: curr.sale_id,
+                    soldBy: curr.sold_by,
+                    organizationId: curr.organization_id,
+                    userId: curr.user_id,
+                    amount: curr.amount,
+                    createdAt: curr.created_at,
+                    updatedAt: curr.updated_at,
+                    saleTypeId: curr.sale_type_id,
+                    saleTypeName: curr.sale_type_name,
+                    products: []
+                };
+            }
+            acc[curr.sale_id].products.push({
+                productId: curr.sale_product_product_id,
+                productName: curr.product_name,
+                productPrice: curr.sale_product_price,
+                productQuantity: curr.sale_product_quantity
+            });
+            return acc;
+        }, {});
+        return Object.values(salesMap);
     }
     static mappOne(body) {
-        return {
-            saleId: body.sale_id,
-            productId: body.product_id,
-            organizationId: body.organization_id,
-            saleTypeId: body.sale_type_id,
-            soldBy: body.sold_by,
-            userId: body.user_id,
-            amount: body.amount,
-            createdAt: body.created_at,
-        };
+        return body.reduce((acc, curr) => {
+            if (!acc.saleId) {
+                acc = {
+                    saleId: curr.sale_id,
+                    soldBy: curr.sold_by,
+                    organizationId: curr.organization_id,
+                    userId: curr.user_id,
+                    amount: curr.amount,
+                    createdAt: curr.created_at,
+                    saleTypeId: curr.sale_type_id,
+                    saleTypeName: curr.sale_type_name,
+                    products: [],
+                };
+            }
+            acc.products.push({
+                productId: curr.sale_product_product_id,
+                productName: curr.product_name,
+                productPrice: curr.sale_product_price,
+                productQuantity: curr.sale_product_quantity,
+            });
+            return acc;
+        }, {});
     }
 }
 exports.default = SaleMapper;

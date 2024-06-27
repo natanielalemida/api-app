@@ -58,11 +58,6 @@ class SaleService {
     updateSold(body) {
         return __awaiter(this, void 0, void 0, function* () {
             const { products } = body;
-            yield this.organizationService.verifyOrganizationById(body.organizationId);
-            yield this.employeeService.getById(body.soldBy);
-            const sale = yield this.saleRepository.updateSold(body);
-            if (!sale)
-                throw new Error("cannot update sale");
             yield Promise.all(products.map((product) => __awaiter(this, void 0, void 0, function* () {
                 const data = yield this.productService.validatorProduct(product.productId);
                 const { quantity } = yield this.productService.getLastModifyQuantity(product.productId, body.saleId);
@@ -73,6 +68,11 @@ class SaleService {
                 }
                 yield this.productService.editProduct(Object.assign(Object.assign({}, product), { productQuantity: agoraVai }));
             })));
+            yield this.organizationService.verifyOrganizationById(body.organizationId);
+            yield this.employeeService.getById(body.soldBy);
+            const sale = yield this.saleRepository.updateSold(body);
+            if (!sale)
+                throw new Error("cannot update sale");
             return sale;
         });
     }

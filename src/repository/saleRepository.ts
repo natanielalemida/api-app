@@ -10,22 +10,60 @@ import { SaleUpdateDto } from "../types/sale/saleUpdateDto";
 export default class SaleRepository implements ISaleRepository {
   public async getSolds(organizationId: number): Promise<SaleDto[]> {
     const result = await connection("sales")
-      .select<SaleFromSQLDto[]>("*")
-      .where("organization_id", organizationId)
-      .andWhere("active", 1);
+      .innerJoin("sale_product", "sale_product.sale_id", "sales.sale_id")
+      .innerJoin("sale_type", "sale_type.sale_type_id", "sales.sale_type_id")
+      .innerJoin("product", "product.product_id", "sale_product.product_id")
+      .select<SaleFromSQLDto[]>([
+        "sales.sale_id",
+        "sales.sold_by",
+        "sales.organization_id",
+        "sales.user_id",
+        "sales.amount",
+        "sales.created_at",
+        "sales.updated_at",
+        "sales.sale_type_id",
+        "sale_type.sale_type_name",
+        "sale_product.quantity as sale_product_quantity",
+        "sale_product.price as sale_product_price",
+        "sale_product.price as sale_product_product_id",
+        "product.product_name as product_name",
+      ])
+
+      .where("sales.organization_id", organizationId)
+      .andWhere("sale_product.active", 1)
+      .andWhere("sales.active", 1);
     return SaleMapper.mappQuery(result);
   }
 
   public async getSoldById(saleId: number): Promise<SaleDto | undefined> {
     const result = await connection("sales")
-      .select<SaleFromSQLDto>("*")
-      .where("sale_id", saleId)
-      .first();
+      .innerJoin("sale_product", "sale_product.sale_id", "sales.sale_id")
+      .innerJoin("sale_type", "sale_type.sale_type_id", "sales.sale_type_id")
+      .innerJoin("product", "product.product_id", "sale_product.product_id")
+      .select<SaleFromSQLDto[]>([
+        "sales.sale_id",
+        "sales.sold_by",
+        "sales.organization_id",
+        "sales.user_id",
+        "sales.amount",
+        "sales.created_at",
+        "sales.updated_at",
+        "sales.sale_type_id",
+        "sale_type.sale_type_name",
+        "sale_product.quantity as sale_product_quantity",
+        "sale_product.price as sale_product_price",
+        "sale_product.price as sale_product_product_id",
+        "product.product_name as product_name",
+      ])
+      .where("sales.sale_id", saleId)
+      .andWhere("active", 1)
+      .andWhere("sale_product.active", 1);
 
     if (!result) return undefined;
 
     return SaleMapper.mappOne(result);
   }
+
   public async createSale(body: SaleCreateDto): Promise<SaleDto | undefined> {
     const transaction = await connection.transaction();
 
@@ -115,7 +153,6 @@ export default class SaleRepository implements ISaleRepository {
       };
     });
 
-
     await transaction("sale_product").insert(productsFormated);
   }
 
@@ -126,12 +163,16 @@ export default class SaleRepository implements ISaleRepository {
   ) {
     Promise.all(
       products.map(async (product) => {
-        return await transaction("sale_product").update({
-          product_id: product.productId,
-          quantity: product.productQuantity,
-          price: product.productPrice,
-          sale_id: saleId,
-        }).where("product_id", product.productId).andWhere('sale_id', saleId).andWhere('active', 1);
+        return await transaction("sale_product")
+          .update({
+            product_id: product.productId,
+            quantity: product.productQuantity,
+            price: product.productPrice,
+            sale_id: saleId,
+          })
+          .where("product_id", product.productId)
+          .andWhere("sale_id", saleId)
+          .andWhere("active", 1);
       })
     );
   }
