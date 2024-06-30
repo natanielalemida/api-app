@@ -64,7 +64,7 @@ class SaleRepository {
                 "product.product_name as product_name",
             ])
                 .where("sales.sale_id", saleId)
-                .andWhere("active", 1)
+                .andWhere("sales.active", 1)
                 .andWhere("sale_product.active", 1);
             if (!result)
                 return undefined;

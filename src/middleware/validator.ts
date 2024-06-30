@@ -68,7 +68,7 @@ export default function validator(): Validator {
   function verifySaleBodyUpdate(body: SaleUpdateDto) : SaleUpdateDto {
     return {
       saleId: body.saleId,
-      productId: body.productId,
+      products: body.products,
       organizationId: body.organizationId,
       saleTypeId: body.saleTypeId,
       soldBy: body.soldBy,
@@ -89,8 +89,7 @@ export default function validator(): Validator {
       amount: body.amount,
       createdAt: body.createdAt
     }
-  }
-
+  } 
   function verifyBodyUserUpdate(body: UserUpdateDto) : UserUpdateDto {
     return {
         customersId: Number(body.customersId),

@@ -41,7 +41,7 @@ function validator() {
     function verifySaleBodyUpdate(body) {
         return {
             saleId: body.saleId,
-            productId: body.productId,
+            products: body.products,
             organizationId: body.organizationId,
             saleTypeId: body.saleTypeId,
             soldBy: body.soldBy,
