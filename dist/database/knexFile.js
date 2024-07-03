@@ -4,21 +4,21 @@ const config = {
     development: {
         client: 'mysql2',
         connection: {
-            host: 'localhost',
+            host: 'appdb.c7ckmgi2afw6.us-east-2.rds.amazonaws.com',
             port: 3306,
-            user: 'root',
-            password: 'Nataniel123@',
-            database: 'app'
+            user: 'admin',
+            password: 'Password123',
+            database: 'appdb'
         }
     },
     production: {
         client: 'mysql2',
         connection: {
-            host: 'localhost',
+            host: 'appdb.c7ckmgi2afw6.us-east-2.rds.amazonaws.com',
             port: 3306,
-            user: 'root',
-            password: 'Nataniel123@',
-            database: 'app'
+            user: 'admin',
+            password: 'Password123',
+            database: 'appdb'
         }
     }
 };
