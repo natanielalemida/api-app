@@ -8,7 +8,7 @@ const config: { [key: string]: Knex.Config } = {
       port: 3306,
       user: 'admin',
       password: 'Password123',
-      database: 'appdb'
+      database: 'app'
     }
   },
   production: {
@@ -18,7 +18,7 @@ const config: { [key: string]: Knex.Config } = {
       port: 3306,
       user: 'admin',
       password: 'Password123',
-      database: 'appdb'
+      database: 'app'
     }
   }
 };
